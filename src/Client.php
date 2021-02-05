@@ -8,6 +8,7 @@ use BackblazeB2\Exceptions\ValidationException;
 use BackblazeB2\Http\Client as HttpClient;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
+use InvalidArgumentException;
 
 class Client
 {
@@ -301,7 +302,7 @@ class Client
             $options['BucketId'] = $this->getBucketIdFromName($options['BucketName']);
         }
 
-        $sourceFiles = $this->listFiles($options['BucketId'], $options['FileName']);
+        $sourceFiles = $this->listFiles($options);
         $sourceFileId = !empty($sourceFiles) ? $sourceFiles[0]->getId() : false;
         if (!$sourceFileId) {
             throw new InvalidArgumentException('Source file not found in B2');
@@ -326,7 +327,7 @@ class Client
             $response['fileInfo'],
             $response['bucketId'],
             $response['action'],
-            $response['uploadTimestamp'],
+            $response['uploadTimestamp']
         );
     }
 
